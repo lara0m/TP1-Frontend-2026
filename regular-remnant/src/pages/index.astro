@@ -1,31 +1,25 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import Navbar from '../components/Navbar.astro';
+import Hero from '../components/Hero.astro';
 ---
 
----
----
 <Layout>
-	<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="generator" content={Astro.generator} >
-    <title>Astro</title>
-  </head>
-  <body>
-	<a href="/">Home</a>
-	<a href="/about/">About</a>
-	<a href="/blog/">Blog</a>
-
-	<h1>About Me</h1>
-	<h2>... and my new Astro site!</h2>
-    <h1>My Astro</h1>
-  </body>
-</html>
-
+  <Navbar />
+  <Hero />
+  <div class="landing-content">
+    <p>Bienvenido al portal no oficial de la Fórmula 1 para la temporada 2026.</p>
+    <p>Explora los equipos, pilotos y conoce las pistas donde se correrá el próximo campeonato.</p>
+  </div>
 </Layout>
+
+<style>
+  .landing-content {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    padding: 20px;
+  }
+</style>

@@ -1,0 +1,64 @@
+---
+---
+<header class="hero">
+  <h1 class="hero-title">Formula <span class="accent">1</span></h1>
+  <p class="hero-sub">Pilotos y calendario de la temporada 2026</p>
+  
+  <div class="hero-actions">
+    <a href="/pilotos" class="btn btn-primary">Ver Pilotos</a>
+    <a href="/carreras" class="btn btn-secondary">Calendario 2026</a>
+  </div>
+</header>
+
+<style>
+  .hero {
+    text-align: center;
+    padding: 80px 20px 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+  .hero-title {
+    font-size: 4rem;
+    font-weight: 800;
+    letter-spacing: -2px;
+    line-height: 1.1;
+  }
+  .accent { color: var(--accent); }
+  .hero-sub {
+    color: var(--text-secondary);
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+  }
+  .hero-actions {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .btn {
+    padding: 12px 24px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.2s;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: white;
+  }
+  .btn-primary:hover {
+    background: var(--accent-dark, #cc0000);
+    transform: translateY(-2px);
+  }
+  .btn-secondary {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+  }
+  .btn-secondary:hover {
+    border-color: var(--text-primary);
+    background: var(--bg-card);
+  }
+</style>

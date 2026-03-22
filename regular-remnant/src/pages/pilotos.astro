@@ -1,0 +1,30 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import DriverGrid from '../components/DriverGrid.astro';
+import DriverCard from '../components/DriverCard.astro';
+---
+
+<Layout>
+  <Navbar />
+  <div class="page-container">
+    <h1 class="page-title">Pilotos de la Temporada 2026</h1>
+    <DriverGrid />
+  </div>
+</Layout>
+
+<style>
+  .page-container {
+    padding-top: 100px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  .page-title {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    color: var(--text-primary, white);
+  }
+</style>

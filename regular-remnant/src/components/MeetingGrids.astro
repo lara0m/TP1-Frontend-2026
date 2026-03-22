@@ -1,0 +1,91 @@
+---
+let meetings = [];
+try {
+  const res = await fetch('https://api.openf1.org/v1/meetings?year=2026');
+  if (res.ok) {
+    const data = await res.json();
+    if (Array.isArray(data)) {
+      meetings = data;
+    } else {
+      console.error('API Error: Data is not an array', data);
+    }
+  } else {
+    console.error('API Error: Failed to fetch meetings', res.status);
+  }
+} catch (e) {
+  console.error('Network Error:', e);
+}
+---
+
+<section class="meetings-section" id="meetings">
+  <div class="section-header">
+    <h2>Calendario <span class="count">{meetings.length} carreras</span></h2>
+  </div>
+
+  <div class="meetings-grid">
+    {meetings.map((meeting: any) => (
+      <div class="meeting-card">
+        <img src={meeting.country_flag} alt={meeting.country_name} class="meeting-flag" />
+        <div class="meeting-info">
+          <h3 class="meeting-name">{meeting.meeting_name}</h3>
+          <p class="meeting-location">{meeting.location}, {meeting.country_name}</p>
+          <p class="meeting-date">{meeting.date_start?.slice(0, 10)}</p>
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
+
+<style>
+  .meetings-section {
+    max-width: 1200px;
+    margin: 0 auto 60px;
+    padding: 0 20px;
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+  .count {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    font-weight: 400;
+    margin-left: 8px;
+  }
+  .meetings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+  }
+  .meeting-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .meeting-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+  .meeting-flag {
+    width: 48px;
+    height: 32px;
+    object-fit: cover;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+  .meeting-name {
+    font-size: 0.9rem;
+    font-weight: 700;
+  }
+  .meeting-location, .meeting-date {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-top: 2px;
+  }
+</style>
