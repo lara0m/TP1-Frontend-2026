@@ -1,0 +1,170 @@
+---
+let drivers = [];
+try {
+  const res = await fetch('https://api.openf1.org/v1/drivers?session_key=latest');
+  if (res.ok) {
+    const allDrivers = await res.json();
+    
+    if (Array.isArray(allDrivers)) {
+      // Eliminar duplicados por driver_number
+      const seen = new Set();
+      drivers = allDrivers.filter((d: any) => {
+        if (d && d.driver_number && !seen.has(d.driver_number)) {
+          seen.add(d.driver_number);
+          return true;
+        }
+        return false;
+      });
+    } else {
+      console.error('API Error: Data is not an array', allDrivers);
+    }
+  } else {
+      console.error('API Error: Failed to fetch drivers', res.status);
+  }
+} catch (e) {
+  console.error('Network Error:', e);
+}
+---
+
+<section class="drivers-section" id="drivers">
+  <div class="section-header">
+    <h2>Pilotos <span class="count">{drivers.length}</span></h2>
+    <input type="text" id="driver-search" placeholder="Buscar piloto o equipo..." class="search-input" />
+  </div>
+
+  <div class="drivers-grid" id="drivers-grid">
+    {drivers.map((driver: any) => {
+      const full_name = driver.full_name ?? 'Unknown';
+      const team_name = driver.team_name ?? '—';
+      const headshot_url = driver.headshot_url ?? '';
+      const team_colour = driver.team_colour ?? 'e8002d';
+      const name_acronym = driver.name_acronym ?? '—';
+      const driver_number = driver.driver_number;
+
+      return (
+        <div class="driver-card" data-name={full_name.toLowerCase()} data-team={team_name.toLowerCase()} style={`--team-color: #${team_colour}`}>
+          <div class="card-top">
+            <span class="driver-number">#{driver_number}</span>
+            <span class="driver-acronym">{name_acronym}</span>
+          </div>
+          {headshot_url
+            ? <img src={headshot_url} alt={full_name} class="driver-photo" />
+            : <div class="driver-photo-placeholder" />
+          }
+          <div class="card-info">
+            <h3 class="driver-name">{full_name}</h3>
+            <p class="driver-team">{team_name}</p>
+          </div>
+          <div class="team-color-bar" />
+        </div>
+      );
+    })}
+  </div>
+</section>
+
+<script>
+  const search = document.getElementById('driver-search') as HTMLInputElement;
+  const cards = document.querySelectorAll('.driver-card');
+
+  search.addEventListener('input', () => {
+    const query = search.value.toLowerCase();
+    cards.forEach((card) => {
+      const name = (card as HTMLElement).dataset.name ?? '';
+      const team = (card as HTMLElement).dataset.team ?? '';
+      (card as HTMLElement).style.display =
+        name.includes(query) || team.includes(query) ? 'flex' : 'none';
+    });
+  });
+</script>
+
+<style>
+  .drivers-section {
+    max-width: 1200px;
+    margin: 0 auto 60px;
+    padding: 0 20px;
+  }
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .count {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    font-weight: 400;
+  }
+  .search-input {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+    padding: 10px 16px;
+    border-radius: var(--radius);
+    font-size: 0.9rem;
+    width: 260px;
+    outline: none;
+  }
+  .search-input:focus { border-color: var(--accent); }
+  .drivers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 16px;
+  }
+  .driver-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: transform 0.2s, border-color 0.2s;
+    display: flex;
+    flex-direction: column;
+  }
+  .driver-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--team-color, var(--accent));
+  }
+  .card-top {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 16px 0;
+  }
+  .driver-number {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+  }
+  .driver-acronym {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--team-color, var(--accent));
+  }
+  .driver-photo {
+    width: 100%;
+    height: 160px;
+    object-fit: contain;
+    background: var(--bg-secondary);
+  }
+  .driver-photo-placeholder {
+    width: 100%;
+    height: 160px;
+    background: var(--bg-secondary);
+  }
+  .card-info {
+    padding: 12px 16px;
+  }
+  .driver-name {
+    font-size: 0.95rem;
+    font-weight: 700;
+  }
+  .driver-team {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-top: 2px;
+  }
+  .team-color-bar {
+    height: 3px;
+    background: var(--team-color, var(--accent));
+    margin-top: auto;
+  }
+</style>
